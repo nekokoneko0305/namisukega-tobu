@@ -21,21 +21,12 @@ const stageSettings = [
     { speed: 4.2, obstacleInterval: [600, 2200], height: 40 }    // ステージ5
 ];
 
+// キャラクターの画像を読み込む
+const characterImage = new Image();
+characterImage.src = 'img/800__namisuke.jpg';
+
 function drawCharacter(x, y) {
-    // 頭
-    ctx.fillStyle = '#FFB6C1';
-    ctx.beginPath();
-    ctx.arc(x + 15, y + 10, 10, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // 体
-    ctx.fillStyle = '#4169E1';
-    ctx.fillRect(x + 5, y + 20, 20, 20);
-    
-    // 足
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(x + 5, y + 40, 8, 10);
-    ctx.fillRect(x + 17, y + 40, 8, 10);
+    ctx.drawImage(characterImage, x, y, 30, 50);
 }
 
 function jump() {
