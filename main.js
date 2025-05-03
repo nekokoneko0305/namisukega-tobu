@@ -25,6 +25,36 @@ const stageSettings = [
 const characterImage = new Image();
 characterImage.src = 'img/800__namisuke.jpg';
 
+// 木の画像を読み込む
+const treeImage = new Image();
+treeImage.src = 'img/tree.png';
+
+function drawBackground() {
+    // 空のグラデーション
+    const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    skyGradient.addColorStop(0, '#87CEEB');  // 空色
+    skyGradient.addColorStop(1, '#E0F7FF');  // 薄い空色
+    ctx.fillStyle = skyGradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 遠くの山々
+    ctx.fillStyle = '#2E8B57';  // 海の緑
+    for (let i = 0; i < 3; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * 200 - 50, canvas.height);
+        ctx.lineTo(i * 200 + 100, canvas.height - 100);
+        ctx.lineTo(i * 200 + 250, canvas.height);
+        ctx.fill();
+    }
+
+    // 地面
+    const groundGradient = ctx.createLinearGradient(0, canvas.height - 50, 0, canvas.height);
+    groundGradient.addColorStop(0, '#90EE90');  // 明るい緑
+    groundGradient.addColorStop(1, '#228B22');  // 森の緑
+    ctx.fillStyle = groundGradient;
+    ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+}
+
 function drawCharacter(x, y) {
     ctx.drawImage(characterImage, x, y, 30, 50);
 }
@@ -72,9 +102,36 @@ function checkStageUp() {
 document.getElementById('jumpBtn').onclick = jump;
 document.addEventListener('keydown', e => { if (e.code === 'Space') jump(); });
 
+function drawFlower(x, y, width, height) {
+    // 花びら
+    ctx.fillStyle = '#FF69B4';  // ピンク色
+    for (let i = 0; i < 5; i++) {
+        ctx.save();
+        ctx.translate(x + width * 0.5, y + height * 0.4);
+        ctx.rotate((i * Math.PI * 2) / 5);
+        ctx.beginPath();
+        ctx.ellipse(0, -height * 0.2, width * 0.2, height * 0.15, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+    
+    // 花の中心
+    ctx.fillStyle = '#FFD700';  // 金色
+    ctx.beginPath();
+    ctx.arc(x + width * 0.5, y + height * 0.4, width * 0.15, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // 茎
+    ctx.fillStyle = '#228B22';  // 緑色
+    ctx.fillRect(x + width * 0.45, y + height * 0.4, width * 0.1, height * 0.6);
+}
+
 function gameLoop() {
     if (gameOver) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 背景を描画
+    drawBackground();
 
     // キャラ
     vy += gravity;
@@ -85,8 +142,8 @@ function gameLoop() {
     // 障害物
     for (let obs of obstacles) {
         obs.x -= scrollSpeed;
-        ctx.fillStyle = '#FF0000';
-        ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+        // 花を描画
+        drawFlower(obs.x, obs.y, obs.w, obs.h);
         // 当たり判定
         if (50 < obs.x + obs.w && 50 + 30 > obs.x && y < obs.y + obs.h && y + 30 > obs.y) {
             gameOver = true;
