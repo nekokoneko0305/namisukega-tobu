@@ -15,10 +15,10 @@ let scrollSpeed = 3;
 // ステージごとの設定
 const stageSettings = [
     { speed: 3, obstacleInterval: [1000, 3000], height: 40 },  // ステージ1
-    { speed: 4, obstacleInterval: [800, 2500], height: 40 },   // ステージ2
-    { speed: 5, obstacleInterval: [600, 2000], height: 40 },   // ステージ3
-    { speed: 6, obstacleInterval: [500, 1500], height: 40 },   // ステージ4
-    { speed: 7, obstacleInterval: [400, 1200], height: 40 }    // ステージ5
+    { speed: 3.3, obstacleInterval: [900, 2800], height: 40 },   // ステージ2
+    { speed: 3.6, obstacleInterval: [800, 2600], height: 40 },   // ステージ3
+    { speed: 3.9, obstacleInterval: [700, 2400], height: 40 },   // ステージ4
+    { speed: 4.2, obstacleInterval: [600, 2200], height: 40 }    // ステージ5
 ];
 
 function drawCharacter(x, y) {
