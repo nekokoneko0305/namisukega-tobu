@@ -23,10 +23,21 @@ const stageSettings = [
 
 // キャラクターの画像を読み込む
 const characterImage = new Image();
-characterImage.src = 'img/800__namisuke.jpg';
+characterImage.onload = () => {
+    // 画像の読み込みが完了したらゲームを開始
+    gameLoop();
+};
+characterImage.onerror = () => {
+    console.error('キャラクター画像の読み込みに失敗しました');
+    alert('キャラクター画像の読み込みに失敗しました');
+};
+characterImage.src = 'img/800__namisuke.png';
 
 // 木の画像を読み込む
 const treeImage = new Image();
+treeImage.onerror = () => {
+    console.error('木の画像の読み込みに失敗しました');
+};
 treeImage.src = 'img/tree.png';
 
 function drawBackground() {
@@ -56,7 +67,11 @@ function drawBackground() {
 }
 
 function drawCharacter(x, y) {
-    ctx.drawImage(characterImage, x, y, 30, 50);
+    // 元の画像の縦横比を維持しながら、高さを50pxに設定
+    const aspectRatio = characterImage.width / characterImage.height;
+    const height = 50;
+    const width = height * aspectRatio;
+    ctx.drawImage(characterImage, x, y, width, height);
 }
 
 function jump() {
@@ -144,8 +159,10 @@ function gameLoop() {
         obs.x -= scrollSpeed;
         // 花を描画
         drawFlower(obs.x, obs.y, obs.w, obs.h);
-        // 当たり判定
-        if (50 < obs.x + obs.w && 50 + 30 > obs.x && y < obs.y + obs.h && y + 30 > obs.y) {
+        // 当たり判定（キャラクターのサイズに合わせて調整）
+        const characterHeight = 50;
+        const characterWidth = characterHeight * (characterImage.width / characterImage.height);
+        if (50 < obs.x + obs.w && 50 + characterWidth > obs.x && y < obs.y + obs.h && y + characterHeight > obs.y) {
             gameOver = true;
             showGameOver();
         }
@@ -200,5 +217,3 @@ function showGameOver() {
         }
     };
 }
-
-gameLoop();
